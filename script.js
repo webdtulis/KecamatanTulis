@@ -41,7 +41,7 @@ const awalanCerita = [
     "Penduduk desa tetangga butuh studi banding!"
 ];
 
-/// ==========================================
+// ==========================================
 // KAMUS DATA (Update Real KKN 2026)
 // Statistik urutannya: [Pertanian, Kelautan, UMKM, Pariwisata, Infrastruktur] (Skala 0-100)
 // ==========================================
@@ -231,14 +231,14 @@ if (typeof kumpulanDesaKKN !== 'undefined') {
 
                 layer.on('click', onClickAction);
                 iconMarker.on('click', onClickAction); 
-                
-                // ===== BAGIAN YANG DITAMBAHKAN UNTUK EFEK KEDAP-KEDIP =====
+
+                // ===== LOGIKA HOVER (EFEK DESA BERKEDIP SAAT MISI) =====
                 layer.on('mouseover', function () { 
                     if (desaTerpilih === null) { 
                         this.setStyle({ fillOpacity: 0.7, weight: 3 }); 
                         this.bringToFront(); 
                         
-                        // FITUR BARU: Kalau ini desa target misi, berikan animasi berkedip
+                        // Kalau ini desa target misi, berikan animasi berkedip
                         if(questActive && misiSaatIni && namaDesa === misiSaatIni.target) {
                             if(this._path) this._path.classList.add('desa-rahasia');
                         }
@@ -252,8 +252,7 @@ if (typeof kumpulanDesaKKN !== 'undefined') {
                         if(this._path) this._path.classList.remove('desa-rahasia');
                     } 
                 });
-                // =========================================================
-
+                // ========================================================
             }
         }).addTo(grupDesaKKN);
     });
