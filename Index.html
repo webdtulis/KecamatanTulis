@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGIS KKN Batang - Desa Tulis (Harvest Moon Theme)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- AUDIO ELEMENTS (Siapkan file mp3 Anda sendiri) -->
+    <audio id="audio-bgm" loop><source src="harvest1.mp3" type="audio/mpeg"></audio>
+    <audio id="audio-click"><source src="klik.mp3" type="audio/mpeg"></audio>
+    <audio id="audio-success"><source src="sukses.mp3" type="audio/mpeg"></audio>
+
+    <!-- OVERLAYS (Cuaca, Waktu, Efek Menang) -->
+    <div id="time-overlay" class="time-siang"></div>
+    <div id="weather-overlay"></div>
+    <div id="confetti-overlay"></div>
+
+    <!-- HEADER TEMA PAPAN KAYU -->
+    <header id="header-webgis">
+        <div class="header-title">
+            <h1>KECAMATAN TULIS</h1>
+            <p>Wilayah Desa KKN Reguler Universitas Diponegoro 2026</p>
+        </div>
+        <div class="header-logos">
+            <img id="logo-kiri" src="undip.webp" alt="Logo Undip" class="logo-item">
+            <img id="logo-tengah" src="dikti.png" alt="Logo dikti" class="logo-item">
+            <img id="logo-kanan" src="batang.png" alt="Logo Batang" class="logo-item">
+        </div>
+        <div class="header-stats">
+            <div class="info-badge"><span class="badge-dot"></span><span>10 Desa Lokasi KKN</span></div>
+            <div class="info-badge secondary"><span>Periode 2026</span></div>
+        </div>
+    </header>
+
+    <!-- TOOLBAR GAME (Kiri Layar) -->
+    <div id="game-toolbar">
+        <button onclick="toggleBGM()" id="btn-bgm">🎵 Musik: MATI</button>
+        <button onclick="changeTime()" id="btn-time">☀️ Waktu: Siang</button>
+        <button onclick="changeWeather()" id="btn-weather">🌤️ Cuaca: Cerah</button>
+        <button onclick="toggleQuest()" id="btn-quest" class="btn-special">📜 Papan Misi</button>
+    </div>
+
+   <!-- MODAL PAPAN MISI -->
+    <div id="quest-modal" class="hidden">
+        <h3>📜 Misi Rahasia KKN</h3>
+        <p>Penduduk desa membutuhkan bantuanmu! Analisis grafik status desa di peta ini dan...</p>
+        
+        <!-- Tambahkan id="quest-text" di div ini -->
+        <div id="quest-text" class="quest-box"><strong>"Klik tombol di bawah untuk menerima misi baru!"</strong></div>
+        
+        <button onclick="toggleQuest()">Siap Laksanakan!</button>
+    </div>
+
+    <!-- PANEL INFORMASI DESA TEMA KERTAS -->
+    <div id="info-panel" class="info-panel-hidden">
+        <button id="close-info" onclick="resetPeta()">✖</button>
+        <div class="info-content">
+            <div class="info-header">
+                <img id="info-logo" src="" alt="Logo Desa" style="display: none;">
+                <h2 id="info-title">Nama Desa</h2>
+            </div>
+            <table class="info-table">
+                <tr><th>Kecamatan</th><td>Tulis</td></tr>
+                <tr><th>Kabupaten</th><td>Batang</td></tr>
+                <tr><th>Informasi</th><td id="info-desc">Deskripsi desa KKN...</td></tr>
+            </table>
+            <div class="chart-container">
+                <canvas id="radarChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Kontainer Peta -->
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="data.js"></script> 
+    <script src="script.js"></script>
+</body>
+</html>

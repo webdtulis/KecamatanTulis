@@ -1,0 +1,164 @@
+html, body { margin: 0; padding: 0; height: 100%; width: 100%; font-family: 'Nunito', sans-serif; overflow: hidden; background-color: #8b5a2b; }
+#map { width: 100%; height: 100vh; z-index: 1; cursor: crosshair; }
+
+/* OVERLAYS (Waktu & Cuaca) */
+#time-overlay, #weather-overlay, #confetti-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 500; pointer-events: none; transition: background 2s ease;
+}
+.time-siang { background: transparent; }
+.time-sore { background: rgba(211, 84, 0, 0.35); mix-blend-mode: multiply; }
+.time-malam { background: rgba(10, 10, 40, 0.6); mix-blend-mode: multiply; }
+
+/* ANIMASI CUACA */
+.raindrop { position: absolute; width: 2px; height: 25px; background: rgba(255,255,255,0.6); animation: fall linear infinite; }
+.leafdrop { position: absolute; width: 15px; height: 15px; background: #e67e22; border-radius: 0 50% 50% 50%; opacity: 0.8; animation: leafFall linear infinite; }
+@keyframes fall { to { transform: translateY(100vh); } }
+@keyframes leafFall { to { transform: translateY(100vh) rotate(360deg); } }
+
+/* HEADER (Sama seperti sebelumnya) */
+#header-webgis { position: absolute; top: 0; left: 0; width: 100%; height: 75px; background: #d38c41; background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 20px, transparent 20px, transparent 40px); z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; box-sizing: border-box; border-bottom: 6px solid #7c471c; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); }
+.header-title { flex: 1; display: flex; flex-direction: column; align-items: flex-start; }
+.header-title h1 { margin: 0; color: #ffffff; font-size: 24px; font-weight: 900; letter-spacing: 2px; text-shadow: 2px 2px 0 #7c471c, -1.5px -1.5px 0 #7c471c, 1.5px -1.5px 0 #7c471c, -1.5px 1.5px 0 #7c471c, 1.5px 1.5px 0 #7c471c; }
+.header-title p { margin: 2px 0 0 0; color: #fffde7; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 1px 1px 0 #7c471c; }
+.header-logos { flex: 1; display: flex; justify-content: center; gap: 15px; align-items: center; }
+.header-logos .logo-item { width: auto; filter: drop-shadow(0 3px 0 #7c471c); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
+.header-logos .logo-item:hover { transform: scale(1.15) rotate(-3deg); }
+#logo-kiri { height: 50px; } #logo-tengah { height: 100px; } #logo-kanan { height: 42px; }
+.header-stats { flex: 1; display: flex; justify-content: flex-end; gap: 12px; align-items: center; }
+.info-badge { display: flex; align-items: center; gap: 8px; background: #65a30d; border: 3px solid #3f6212; box-shadow: 0 4px 0 #3f6212; padding: 6px 14px; border-radius: 12px; color: #ffffff; font-size: 13px; font-weight: 800; text-shadow: 1px 1px 0 #3f6212; transform: translateY(-2px); }
+.info-badge.secondary { background: #eab308; border-color: #854d0e; box-shadow: 0 4px 0 #854d0e; color: #ffffff; text-shadow: 1px 1px 0 #854d0e; }
+.badge-dot { width: 8px; height: 8px; background-color: #bbf7d0; border-radius: 50%; box-shadow: 0 0 8px #bbf7d0; animation: pulse-dot 2s infinite; }
+@keyframes pulse-dot { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
+.leaflet-top.leaflet-left { margin-top: 85px !important; }
+
+/* ==========================================
+   TOOLBAR GAME & MODAL MISI (BARU)
+   ========================================== */
+#game-toolbar {
+    position: absolute; top: 100px; left: 20px; z-index: 1000;
+    display: flex; flex-direction: column; gap: 10px; width: 160px;
+}
+#game-toolbar button {
+    background: #d38c41; border: 3px solid #8b5a2b; border-radius: 8px; padding: 10px;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 12px; color: #fff;
+    cursor: pointer; box-shadow: 0 4px 0 #5c3a21; transition: all 0.1s ease; text-shadow: 1px 1px 0 #5c3a21;
+}
+#game-toolbar button:active { transform: translateY(4px); box-shadow: 0 0 0 #5c3a21; }
+#game-toolbar button.btn-special { background: #e74c3c; border-color: #900c3f; box-shadow: 0 4px 0 #900c3f; }
+
+#quest-modal {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000;
+    background: #fff8e7; border: 6px solid #8b5a2b; box-shadow: 0 0 0 1000px rgba(0,0,0,0.5), 0 15px 30px rgba(0,0,0,0.6);
+    border-radius: 16px; padding: 30px; width: 400px; text-align: center; color: #5c3a21;
+}
+#quest-modal.hidden { display: none; }
+#quest-modal h3 { margin-top: 0; color: #d35400; font-size: 24px; font-weight: 900; }
+.quest-box { background: #fdebd0; border: 2px dashed #d35400; padding: 15px; margin: 15px 0; border-radius: 8px; font-size: 16px; color: #d35400; }
+#quest-modal button { background: #27ae60; border: 3px solid #1e8449; color: white; font-family: 'Nunito'; font-weight: 800; font-size: 16px; padding: 10px 20px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 0 #1e8449; }
+#quest-modal button:active { transform: translateY(4px); box-shadow: 0 0 0; }
+
+/* ==========================================
+   PANEL INFORMASI DESA & GRAFIK RPG
+   ========================================== */
+#info-panel { 
+    position: absolute; 
+    bottom: 30px; 
+    right: 20px; 
+    z-index: 1000; 
+    background: #fff8e7; 
+    border: 6px solid #8b5a2b; 
+    box-shadow: 0 8px 0 #5c3a21, 0 15px 25px rgba(0, 0, 0, 0.5); 
+    border-radius: 16px; 
+    width: 340px; 
+    color: #5c3a21; 
+    /* Ubah transform untuk efek memantul */
+    transform: translateY(150%) scale(0.8); 
+    opacity: 0; 
+    pointer-events: none; 
+    /* Transisi cubic-bezier untuk efek memantul (bounce) yang sangat *game-like* */
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+}
+
+#info-panel.tampil { 
+    transform: translateY(0) scale(1); 
+    opacity: 1; 
+    pointer-events: auto; 
+}
+#info-panel.tampil { transform: translateY(0); opacity: 1; pointer-events: auto; }
+.info-content { padding: 20px; max-height: 70vh; overflow-y: auto; border-radius: 10px; }
+.info-content::-webkit-scrollbar { width: 8px; } .info-content::-webkit-scrollbar-track { background: transparent; } .info-content::-webkit-scrollbar-thumb { background: #d2b48c; border-radius: 10px; } .info-content::-webkit-scrollbar-thumb:hover { background: #a0522d; }
+#close-info { position: absolute; top: -15px; right: -15px; background: #ef4444; color: #fff; border: 4px solid #991b1b; box-shadow: 0 4px 0 #991b1b; border-radius: 50%; width: 38px; height: 38px; font-size: 16px; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.1s ease; z-index: 10; }
+#close-info:active { transform: translateY(4px); box-shadow: 0 0 0 #991b1b; }
+.info-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; border-bottom: 3px dashed #d2b48c; padding-bottom: 10px; padding-right: 15px; }
+#info-logo { width: 45px; height: 45px; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(92, 58, 33, 0.4)); }
+#info-title { margin: 0; font-size: 22px; color: #d35400; font-weight: 900; text-shadow: 1px 1px 0 #fdebd0; }
+.info-table { width: 100%; border-collapse: collapse; font-size: 13px; } .info-table th { text-align: left; padding: 6px 0; color: #a0522d; width: 35%; vertical-align: top; font-weight: 800; } .info-table td { text-align: justify; padding: 6px 0; color: #5c3a21; vertical-align: top; line-height: 1.5; font-weight: 600; }
+.chart-container { 
+    width: 100%; 
+    height: 250px; 
+    margin-top: 15px; 
+    background: rgba(255,255,255,0.5); 
+    border-radius: 12px; 
+    padding: 10px; 
+    padding-bottom: 25px; /* Memberikan ruang napas ekstra di bagian bawah */
+    box-sizing: border-box; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+canvas#radarChart { 
+    max-width: 100%; 
+    max-height: 100%; 
+    transform: translateY(-15px); /* Menggeser seluruh kanvas grafik ke atas */
+}
+
+.potensi-icon { font-size: 20px; text-shadow: 2px 2px 5px rgba(0,0,0,0.6); animation: bounceIcon 2s infinite ease-in-out; cursor: pointer; }
+@keyframes bounceIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.harvest-particle { position: absolute; pointer-events: none; font-size: 24px; z-index: 9999; animation: floatUpFade 1s ease-out forwards; }
+@keyframes floatUpFade { 0% { opacity: 1; transform: translateY(0) scale(0.5) rotate(0deg); } 100% { opacity: 0; transform: translateY(-80px) scale(1.5) rotate(45deg); } }
+
+/* EFEK MENANG MISI (CONFETTI TEXT) */
+.win-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 60px; font-weight: 900; color: #f1c40f; text-shadow: 4px 4px 0 #d35400, -2px -2px 0 #fff; animation: popInWin 2s ease forwards; pointer-events: none; z-index: 9999; }
+@keyframes popInWin { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; } 80% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(2); opacity: 0; } }
+
+/* ==========================================
+   ANIMASI KARAKTER BERJALAN
+   ========================================== */
+#walking-character {
+    position: absolute;
+    bottom: 15px; /* Jarak dari bawah layar */
+    left: -60px;  /* Mulai dari luar layar sebelah kiri */
+    font-size: 45px; /* Ukuran karakter */
+    z-index: 1000; /* Memastikan karakter ada di atas peta */
+    pointer-events: none; /* Agar tidak mengganggu saat klik peta */
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5)); /* Efek bayangan */
+    
+    /* Menggabungkan 2 animasi: Berjalan maju & Melangkah (memantul) */
+    animation: 
+        walkAcross 25s linear infinite, 
+        stepBounce 0.4s alternate infinite;
+}
+
+/* Animasi bergerak dari ujung kiri ke ujung kanan layar */
+@keyframes walkAcross {
+    0% { left: -60px; opacity: 0; }
+    5% { opacity: 1; }
+    95% { opacity: 1; }
+    100% { left: 105vw; opacity: 0; }
+}
+
+/* Animasi memantul (seperti langkah kaki bergantian) */
+@keyframes stepBounce {
+    0% { transform: translateY(0) rotate(-5deg); }
+    100% { transform: translateY(-10px) rotate(5deg); }
+}
+/* Efek petunjuk rahasia (pulse) */
+@keyframes rahasiaPulse {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.3) drop-shadow(0 0 5px #FFD700); }
+    100% { filter: brightness(1); }
+}
+.desa-rahasia {
+    animation: rahasiaPulse 2s infinite;
+}
