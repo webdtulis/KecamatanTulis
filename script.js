@@ -351,3 +351,37 @@ window.resetPeta = function() {
     const panelInfo = document.getElementById('info-panel');
     if (panelInfo) { panelInfo.classList.remove('tampil'); }
 };
+
+// ==========================================
+// FITUR LAYAR PENUH (FULLSCREEN)
+// ==========================================
+window.toggleFullScreen = function() {
+    playSFX('audio-click'); // Putar efek suara klik
+    let doc = document.documentElement;
+    let btn = document.getElementById('btn-fullscreen');
+
+    // Jika belum layar penuh, maka perbesar!
+    if (!document.fullscreenElement) {
+        if (doc.requestFullscreen) { doc.requestFullscreen(); } 
+        else if (doc.webkitRequestFullscreen) { doc.webkitRequestFullscreen(); } // Safari
+        else if (doc.msRequestFullscreen) { doc.msRequestFullscreen(); } // IE11
+        btn.innerText = "🔳 Layar Normal";
+    } 
+    // Jika sudah layar penuh, kembalikan seperti semula!
+    else {
+        if (document.exitFullscreen) { document.exitFullscreen(); } 
+        else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); } 
+        else if (document.msExitFullscreen) { document.msExitFullscreen(); }
+        btn.innerText = "🔲 Layar Penuh";
+    }
+};
+
+// Deteksi otomatis jika pengunjung keluar layar penuh menggunakan tombol 'Esc' di keyboard
+document.addEventListener('fullscreenchange', () => {
+    let btn = document.getElementById('btn-fullscreen');
+    if (!document.fullscreenElement) {
+        btn.innerText = "🔲 Layar Penuh";
+    } else {
+        btn.innerText = "🔳 Layar Normal";
+    }
+});

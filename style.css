@@ -85,7 +85,12 @@ html, body { margin: 0; padding: 0; height: 100%; width: 100%; font-family: 'Nun
     pointer-events: auto; 
 }
 #info-panel.tampil { transform: translateY(0); opacity: 1; pointer-events: auto; }
-.info-content { padding: 20px; max-height: 70vh; overflow-y: auto; border-radius: 10px; }
+.info-content { 
+    padding: 20px; 
+    max-height: calc(100vh - 180px); /* Kunci agar panel tidak menabrak header */
+    overflow-y: auto; 
+    border-radius: 10px; 
+}
 .info-content::-webkit-scrollbar { width: 8px; } .info-content::-webkit-scrollbar-track { background: transparent; } .info-content::-webkit-scrollbar-thumb { background: #d2b48c; border-radius: 10px; } .info-content::-webkit-scrollbar-thumb:hover { background: #a0522d; }
 #close-info { position: absolute; top: -15px; right: -15px; background: #ef4444; color: #fff; border: 4px solid #991b1b; box-shadow: 0 4px 0 #991b1b; border-radius: 50%; width: 38px; height: 38px; font-size: 16px; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.1s ease; z-index: 10; }
 #close-info:active { transform: translateY(4px); box-shadow: 0 0 0 #991b1b; }
@@ -161,4 +166,15 @@ canvas#radarChart {
 }
 .desa-rahasia {
     animation: rahasiaPulse 2s infinite;
+}
+
+/* PENYESUAIAN KHUSUS LAYAR TABLET & HP (RESPONSIVE) */
+@media (max-height: 700px) {
+    .chart-container {
+        height: 180px; /* Mengecilkan grafik agar proporsional di layar pendek */
+        padding-bottom: 10px;
+    }
+    canvas#radarChart { 
+        transform: translateY(-10px); 
+    }
 }
